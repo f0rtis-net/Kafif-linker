@@ -6,6 +6,6 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class UrlEntitySpecificationBuilder {
     public static Specification<UrlEntity> build(DeleteUrlEntityDto dto) {
-        return (root, query, builder) -> builder.lessThanOrEqualTo(root.get("expires_in"), dto.getExpires_in());
+        return (root, query, builder) -> builder.lessThanOrEqualTo(root.get("expiresIn"), dto.getExpiresIn());
     }
 }

@@ -12,6 +12,6 @@ public class ClearDatabasesTask {
 
     @Scheduled(cron = "10 * * * * *")
     public void execute() {
-        linkShorter.deleteAllExpiredUrls();
+        linkShorter.deleteAllExpiredUrlsFromDatabase();
     }
 }

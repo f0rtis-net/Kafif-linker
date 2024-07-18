@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: backend
+  datasource:
+    url: jdbc:tc:postgresql:13-alpine:///test
+    hikari:
+      schema: kafif_linker_v1
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+    generate-ddl: false
+
+logging:
+  level:
+    org.hibernate.envers.boot: OFF
+    org.flywaydb.core.internal.sqlscript.DefaultSqlScriptExecutor: OFF
+    org.hibernate.hibernate.SQL: TRACE
+    org.hibernate.hibernate.orm.jdbc.bind: TRACE

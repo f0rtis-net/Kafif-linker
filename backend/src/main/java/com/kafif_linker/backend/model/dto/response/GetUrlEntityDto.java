@@ -1,4 +1,4 @@
-package com.kafif_linker.backend.model.dto.request;
+package com.kafif_linker.backend.model.dto.response;
 
 import lombok.Value;
 
@@ -9,7 +9,9 @@ import java.util.Date;
  * DTO for {@link com.kafif_linker.backend.model.entity.UrlEntity}
  */
 @Value
-public class DeleteUrlEntityDto implements Serializable {
+public class GetUrlEntityDto implements Serializable {
+    Long id;
+    String longUrl;
     Date createdAt;
     Date expiresIn;
 }

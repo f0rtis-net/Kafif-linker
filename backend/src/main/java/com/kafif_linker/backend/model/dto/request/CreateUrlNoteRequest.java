@@ -10,7 +10,6 @@ import java.util.Date;
  */
 @Value
 public class CreateUrlNoteRequest implements Serializable {
-    String id;
     String longUrl;
     Date expiresIn;
     Date createdAt;
