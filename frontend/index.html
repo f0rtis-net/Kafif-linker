@@ -29,10 +29,11 @@
         const linkify = async () => {
 //            let r = await fetch(`/zalupa?u=${link.value}`).then(r=>r.json())
             let r = {
-                status: "err/ok",
+                status: "ok",
                 url: `https://kafif.ru?=njoeigorih`,
-                error: "Ты пидорас"
+                error: "Возникла непредвиденная ошибка"
             } 
+
             if (r.status=="ok") {
                 link.value = r.url
             } else {

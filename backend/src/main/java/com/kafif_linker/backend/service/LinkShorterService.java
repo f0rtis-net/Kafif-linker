@@ -9,11 +9,12 @@ import com.kafif_linker.backend.repository.specification.UrlEntitySpecificationB
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
+import java.net.URL;
 import java.util.Date;
 
 @RequiredArgsConstructor
@@ -36,6 +37,8 @@ public class LinkShorterService {
 
         var date = new Date();
         urlEntity.setCreatedAt(date);
+
+        //TODO: remove hardcoded value
         urlEntity.setExpiresIn(DateUtils.addDays(date, 30));
 
         UrlEntity response = urlEntityRepository.save(urlEntity);
@@ -43,20 +46,16 @@ public class LinkShorterService {
         return shortUrlGenerator.generateShortUrlById(response.getId());
     }
 
-    @Cacheable(value = "urlCache", key = "#shortUrl")
-    public String getLongUrlByShort(String shortUrl) {
-        if (!this.validateUrl(shortUrl)) {
-            throw new UrlInvalidFormatException();
-        }
+    @Cacheable(value = "urlCache", key = "#shortedId")
+    public String getLongUrlByShort(String shortedId) {
+        log.info("Getting non cached url from database. shortedId: {}", shortedId);
 
-        log.info("Getting non cached url from database. ShortUrl: {}", shortUrl);
-
-        Long id = shortUrlGenerator.decodeEntityIdByShortUrl(shortUrl);
+        Long id = shortUrlGenerator.decodeEntityIdByShortUrl(shortedId);
 
         return urlEntityRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.error("Could not find url with shortUrl: {}", shortUrl);
-                    return new UrlIsNotExistsException(shortUrl);
+                    log.error("Could not find url with shortedId: {}", shortedId);
+                    return new UrlIsNotExistsException(shortedId);
                 })
                 .getLongUrl();
     }
@@ -68,6 +67,13 @@ public class LinkShorterService {
     }
 
     private boolean validateUrl(String url) {
-        return StringUtils.isNotBlank(url);
+        URL parsedUrl;
+        try {
+            parsedUrl = new URI(url).toURL();
+        } catch (Exception e) {
+            return false;
+        }
+
+        return !parsedUrl.getHost().equals("localhost");
     }
 }

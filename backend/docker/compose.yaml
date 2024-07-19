@@ -10,6 +10,15 @@ services:
       POSTGRES_DB: kafif_linker
     volumes:
       - pgdata:/var/lib/postgresql/data
-
+  cache:
+    image: redis:7.2.5
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    ports:
+      - "6379:6379"
 volumes:
+  redis-data: {}
   pgdata:
